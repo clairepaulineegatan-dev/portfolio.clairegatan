@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claire Pauline Gatan — Listings, Ledgers & Data Entry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #1E2320;
+    --paper: #EEF0E2;
+    --paper-2: #E4E7D6;
+    --rule: #B9BEA4;
+    --rule-red: #C99494;
+    --green: #2F4A3D;
+    --green-2: #3E6152;
+    --green-3: #557567;
+    --stamp: #A63A32;
+    --brass: #9C7A38;
+    --manila: #D8B77F;
+    --sky: #6D8FA0;
+    --paper-shadow: 0 1px 0 rgba(30,35,32,0.06);
+    --mono: 'Space Mono', monospace;
+    --sans: 'Work Sans', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.55;
+  }
+  a{color:inherit;}
+  .ruled{
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 37px,
+      var(--rule) 38px
+    );
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- NAV: folder tabs ---------- */
+  .tabnav{
+    position:sticky; top:0; z-index:50;
+    background:var(--green);
+    display:flex; align-items:flex-end;
+    padding:0 16px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .tabnav::-webkit-scrollbar{display:none;}
+  .tabnav .brand{
+    font-family:var(--mono); color:var(--paper);
+    font-size:13px; letter-spacing:0.08em;
+    padding:14px 18px; white-space:nowrap;
+    text-decoration:none; opacity:0.85;
+  }
+  .tabnav ul{
+    list-style:none; display:flex; margin:0 0 0 auto; padding:0; gap:6px;
+  }
+  .tabnav li a{
+    display:block;
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.04em;
+    text-decoration:none;
+    color:var(--ink);
+    padding:12px 20px 10px;
+    white-space:nowrap;
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+    transform:translateY(6px);
+    transition:transform .18s ease, opacity .18s ease;
+    opacity:0.82;
+  }
+  .tabnav li:nth-child(1) a{background:var(--manila);}
+  .tabnav li:nth-child(2) a{background:var(--sky); color:var(--paper);}
+  .tabnav li:nth-child(3) a{background:var(--brass); color:var(--paper);}
+  .tabnav li:nth-child(4) a{background:#B7A78E;}
+  .tabnav li:nth-child(5) a{background:var(--stamp); color:var(--paper);}
+  .tabnav li a:hover, .tabnav li a.active{transform:translateY(0); opacity:1;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--paper);
+    padding:64px 0 40px;
+    position:relative;
+  }
+  .hero-sheet{ padding:44px 0 30px; }
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.14em;
+    color:var(--green-2); text-transform:uppercase;
+    display:inline-block; margin-bottom:14px;
+  }
+  h1.name{
+    font-family:var(--mono); font-weight:700;
+    font-size:clamp(32px, 6vw, 58px);
+    line-height:1.08; margin:0 0 18px;
+    letter-spacing:-0.01em;
+  }
+  .tagline{
+    font-size:clamp(17px, 2.2vw, 21px);
+    max-width:600px; color:var(--ink); margin:0 0 30px;
+    font-weight:500;
+  }
+  .tagline b{color:var(--green);}
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:6px;}
+  .btn{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.03em;
+    padding:13px 22px; text-decoration:none; display:inline-block;
+    border:2px solid var(--green); border-radius:2px;
+  }
+  .btn-solid{background:var(--green); color:var(--paper);}
+  .btn-solid:hover{background:var(--green-2);}
+  .btn-line{color:var(--green); background:transparent;}
+  .btn-line:hover{background:var(--green); color:var(--paper);}
+
+  .stamp{
+    font-family:var(--mono); font-weight:700; font-size:11px;
+    letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--stamp); border:2.5px solid var(--stamp);
+    border-radius:50%; width:96px; height:96px;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; transform:rotate(-9deg);
+    padding:6px; line-height:1.25;
+    opacity:0.85;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1fr auto; gap:24px; align-items:start;
+  }
+
+  /* ledger snapshot strip under hero */
+  .snapshot{
+    margin-top:38px;
+    border-top:2px solid var(--ink);
+    border-bottom:1px solid var(--rule);
+  }
+  .snapshot-row{
+    display:grid; grid-template-columns: 90px 1fr 1fr;
+    font-family:var(--mono); font-size:12.5px;
+    border-bottom:1px solid var(--rule);
+    padding:10px 0;
+  }
+  .snapshot-row.head{
+    font-weight:700; letter-spacing:0.05em; color:var(--green);
+    border-bottom:1px solid var(--ink);
+  }
+  .snapshot-row span:first-child{color:var(--green-2);}
+
+  /* ---------- SECTION LABELS ---------- */
+  section{padding:64px 0;}
+  .sec-head{
+    display:flex; align-items:baseline; gap:14px; margin-bottom:34px;
+    border-bottom:2px solid var(--ink); padding-bottom:12px;
+  }
+  .sec-index{
+    font-family:var(--mono); font-size:13px; color:var(--stamp); font-weight:700;
+  }
+  .sec-head h2{
+    font-family:var(--mono); font-size:clamp(22px,3vw,30px); margin:0;
+    letter-spacing:-0.01em;
+  }
+  .sec-sub{
+    font-family:var(--mono); font-size:12px; color:var(--green-2); margin-left:auto;
+    letter-spacing:0.04em;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about{background:var(--paper-2);}
+  .about-inner{display:grid; grid-template-columns: 1.3fr 1fr; gap:48px;}
+  .about p{font-size:16px; max-width:52ch;}
+  .about .lede{font-size:19px; font-weight:600; color:var(--green);}
+  .badge-row{display:flex; flex-wrap:wrap; gap:14px; margin-top:20px;}
+  .badge{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.05em;
+    border:1.5px dashed var(--brass); color:var(--brass);
+    padding:8px 12px; border-radius:2px; text-transform:uppercase;
+  }
+  .folder-note{
+    background:var(--manila); border:1px solid #b6935a;
+    padding:20px 22px; position:relative;
+    box-shadow: 3px 3px 0 rgba(30,35,32,0.15);
+  }
+  .folder-note::before{
+    content:'CLIENT FILE';
+    position:absolute; top:-13px; left:20px;
+    background:var(--stamp); color:var(--paper);
+    font-family:var(--mono); font-size:10px; letter-spacing:0.1em;
+    padding:4px 10px;
+  }
+  .folder-note dl{margin:14px 0 0; font-family:var(--mono); font-size:12.5px;}
+  .folder-note dt{color:#6b5324; margin-top:10px;}
+  .folder-note dd{margin:2px 0 0; font-weight:700; color:var(--ink);}
+
+  /* ---------- SERVICES ---------- */
+  .services-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+  }
+  .card{
+    background:var(--paper); border:1.5px solid var(--ink);
+    position:relative; padding:28px 22px 22px;
+    transition: transform .16s ease, box-shadow .16s ease;
+  }
+  .card:hover{ transform:translate(-3px,-3px); box-shadow:5px 5px 0 var(--ink); }
+  .card-tab{
+    position:absolute; top:-14px; left:20px;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.08em;
+    padding:5px 12px; color:var(--paper); text-transform:uppercase;
+  }
+  .card:nth-child(6n+1) .card-tab{background:var(--green);}
+  .card:nth-child(6n+2) .card-tab{background:var(--stamp);}
+  .card:nth-child(6n+3) .card-tab{background:var(--sky);}
+  .card:nth-child(6n+4) .card-tab{background:var(--brass);}
+  .card:nth-child(6n+5) .card-tab{background:var(--green-3);}
+  .card:nth-child(6n+6) .card-tab{background:#8a6b8f;}
+  .card h3{font-family:var(--mono); font-size:16px; margin:14px 0 10px;}
+  .card p{font-size:14.5px; margin:0; color:#3a423d;}
+  .card .plat{
+    margin-top:14px; display:flex; flex-wrap:wrap; gap:6px;
+  }
+  .plat span{
+    font-family:var(--mono); font-size:10.5px; border:1px solid var(--rule);
+    padding:3px 8px; color:var(--green-2);
+  }
+
+  /* ---------- EXPERIENCE (ledger table) ---------- */
+  .ledger{background:var(--paper);}
+  .ledger-table{width:100%; border-collapse:collapse; font-size:14px;}
+  .ledger-table thead th{
+    font-family:var(--mono); font-size:11.5px; text-transform:uppercase;
+    letter-spacing:0.06em; text-align:left; color:var(--paper);
+    background:var(--green); padding:10px 14px;
+  }
+  .ledger-table td{
+    padding:16px 14px; border-bottom:1px solid var(--rule);
+    vertical-align:top;
+  }
+  .ledger-table tr:hover td{background:var(--paper-2);}
+  .role{font-weight:700; color:var(--green);}
+  .company{font-family:var(--mono); font-size:12.5px; color:var(--ink);}
+  .period{font-family:var(--mono); font-size:12px; color:var(--green-2); white-space:nowrap;}
+  .status{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.05em;
+    padding:4px 9px; border:1px solid; display:inline-block; text-transform:uppercase;
+  }
+  .status.current{color:var(--stamp); border-color:var(--stamp);}
+  .status.done{color:var(--green-2); border-color:var(--green-2);}
+  .duties{font-size:13px; color:#3a423d; margin-top:6px;}
+
+  /* ---------- SKILLS (stamped tags) ---------- */
+  .skills-wrap{display:flex; flex-wrap:wrap; gap:14px;}
+  .skill-stamp{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.04em;
+    border:2px solid var(--green); color:var(--green);
+    padding:9px 16px; border-radius:2px;
+    transform:rotate(var(--r,0deg));
+  }
+  .skill-stamp:nth-child(3n){--r:-2deg; border-color:var(--stamp); color:var(--stamp);}
+  .skill-stamp:nth-child(4n){--r:1.5deg; border-color:var(--brass); color:var(--brass);}
+  .skill-stamp:nth-child(5n){--r:-1deg; border-color:var(--sky); color:var(--sky);}
+
+  /* ---------- CREDENTIALS ---------- */
+  .creds{background:var(--paper-2);}
+  .creds-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  .creds h3{font-family:var(--mono); font-size:14px; color:var(--green); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:14px;}
+  .creds ul{margin:0; padding:0; list-style:none;}
+  .creds li{
+    font-size:14px; padding:10px 0; border-bottom:1px dotted var(--rule);
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  .creds li b{font-weight:600;}
+  .creds li span{font-family:var(--mono); font-size:11.5px; color:var(--green-2); white-space:nowrap;}
+
+  /* ---------- CONTACT ---------- */
+  .contact{background:var(--green); color:var(--paper);}
+  .contact .sec-head{border-bottom-color:rgba(238,240,226,0.35);}
+  .contact .sec-head h2{color:var(--paper);}
+  .contact .sec-index{color:var(--manila);}
+  .contact-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:48px; align-items:center;}
+  .contact p{font-size:16px; max-width:46ch; opacity:0.92;}
+  .contact-lines{font-family:var(--mono); font-size:14px; margin-top:22px;}
+  .contact-lines div{padding:9px 0; border-bottom:1px solid rgba(238,240,226,0.25); display:flex; gap:12px;}
+  .contact-lines div span:first-child{color:var(--manila); width:74px; flex-shrink:0;}
+  .contact-lines a{text-decoration:underline; color:var(--paper);}
+  .refs{
+    background:rgba(238,240,226,0.06); border:1px solid rgba(238,240,226,0.3);
+    padding:22px; font-family:var(--mono); font-size:12px;
+  }
+  .refs h4{margin:0 0 14px; font-size:12px; letter-spacing:0.08em; color:var(--manila); text-transform:uppercase;}
+  .refs li{list-style:none; padding:8px 0; border-bottom:1px dashed rgba(238,240,226,0.25);}
+  .refs li b{display:block; font-family:var(--sans); font-weight:600; font-size:13px;}
+
+  footer{
+    background:var(--ink); color:var(--paper); text-align:center;
+    padding:22px; font-family:var(--mono); font-size:11px; letter-spacing:0.05em; opacity:0.7;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .stamp{margin-top:10px;}
+    .about-inner, .creds-grid, .contact-grid{grid-template-columns:1fr;}
+    .services-grid{grid-template-columns:1fr 1fr;}
+    .snapshot-row{grid-template-columns:70px 1fr; row-gap:2px;}
+    .snapshot-row span:nth-child(3){grid-column:2;}
+  }
+  @media (max-width:560px){
+    .services-grid{grid-template-columns:1fr;}
+    .ledger-table thead{display:none;}
+    .ledger-table, .ledger-table tbody, .ledger-table tr, .ledger-table td{display:block; width:100%;}
+    .ledger-table tr{border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:8px;}
+    .ledger-table td{border-bottom:none; padding:4px 14px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .card, .tabnav li a{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="tabnav">
+  <a class="brand" href="#top">C.P.GATAN — VA SERVICES</a>
+  <ul>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#credentials">Credentials</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-sheet">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Freelance Virtual Assistant</span>
+        <h1 class="name">Claire Pauline Gatan</h1>
+        <p class="tagline">I keep your <b>listings live</b>, your <b>records accurate</b>, and your
+        back office <b>caught up</b> — across every platform you sell on.</p>
+        <div class="hero-actions">
+          <a class="btn btn-solid" href="mailto:clairepaulineegatan@gmail.com">Email Me</a>
+          <a class="btn btn-line" href="tel:+639458853632">+63 945 885 3632</a>
+        </div>
+      </div>
+      <div class="stamp">VERIFIED<br>AR &amp; DATA<br>ENTRY</div>
+    </div>
+
+    <div class="snapshot">
+      <div class="snapshot-row head"><span>Ref.</span><span>Entry</span><span>Detail</span></div>
+      <div class="snapshot-row"><span>01</span><span>Background</span><span>BS Business Administration, Major in Management</span></div>
+      <div class="snapshot-row"><span>02</span><span>Core work</span><span>E-commerce listing management, data encoding, administrative &amp; clerical support, billing &amp; accounts receivable</span></div>
+      <div class="snapshot-row"><span>03</span><span>Tools</span><span>SAP (AR &amp; HR-Labor), MS Office &amp; Excel, Toyota Sales System, Meralco internal systems, Claude AI</span></div>
+      <div class="snapshot-row"><span>04</span><span>Based in</span><span>San Jose Del Monte, Bulacan, Philippines — works remote</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="about" id="about">
+  <div class="wrap about-inner">
+    <div>
+      <div class="sec-head" style="border:none; padding:0; margin-bottom:20px;">
+        <span class="sec-index">— About</span>
+      </div>
+      <p class="lede">Grounded experience in accounts receivable, property coordination, and administrative data management — now applied to keeping online sellers' listings and records accurate.</p>
+      <p>Over the past few years I've built a steady record across three roles: 1 year and 7 months as a Credit and Collection Assistant at Toyota Quezon Avenue, 3 months as a Senior Property Specialist in real estate, and a year as a Clerk at Meralco Plaridel Sector under Miescor Logistics, Inc. Each role required the same core discipline — accurate records, timely follow-through, and clear coordination across departments — which is exactly what I bring to managing your listings and back-office data.</p>
+      <div class="badge-row">
+        <span class="badge">CHED Scholar 2021–2023</span>
+        <span class="badge">Accounts Receivable Experience</span>
+        <span class="badge">Business Admin Graduate</span>
+      </div>
+    </div>
+    <div class="folder-note">
+      <strong style="font-family:var(--mono); font-size:13px;">Snapshot</strong>
+      <dl>
+        <dt>Most recent</dt>
+        <dd>Clerk, Meralco Plaridel / Miescor Logistics (May 2025 – Jun 2026)</dd>
+        <dt>Prior roles</dt>
+        <dd>Credit &amp; Collection Assistant, Toyota QA</dd>
+        <dt>Specialty</dt>
+        <dd>Listings, encoding, billing, admin coordination</dd>
+        <dt>Availability</dt>
+        <dd>Remote, part-time / project-based</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="ledger" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-index">§ 02</span>
+      <h2>What I handle</h2>
+      <span class="sec-sub">SERVICE INDEX</span>
+    </div>
+    <div class="services-grid">
+      <div class="card">
+        <span class="card-tab">Posting</span>
+        <h3>Multi-Platform Product Posting</h3>
+        <p>I list, update, and keep your products consistent across every channel you sell on — prices, photos, descriptions, and stock all matching.</p>
+        <div class="plat"><span>Shopee</span><span>Lazada</span><span>TikTok Shop</span><span>FB Marketplace</span></div>
+      </div>
+      <div class="card">
+        <span class="card-tab">Encoding</span>
+        <h3>Data Entry &amp; Website Updates</h3>
+        <p>Regular, accurate data entry for your website or internal systems — new items, price changes, and content updates handled on a schedule.</p>
+        <div class="plat"><span>CMS entry</span><span>Spreadsheets</span><span>Product catalogs</span></div>
+      </div>
+      <div class="card">
+        <span class="card-tab">Billing</span>
+        <h3>Billing &amp; Invoicing</h3>
+        <p>I prepare billing statements and invoices, and track what's owed and what's paid, so nothing slips past due.</p>
+        <div class="plat"><span>Invoices</span><span>AR tracking</span><span>Payment logs</span></div>
+      </div>
+      <div class="card">
+        <span class="card-tab">Records</span>
+        <h3>Database &amp; Inventory Management</h3>
+        <p>Your stock counts, order logs, and customer records kept current and organized, with regular monitoring so gaps get caught early.</p>
+        <div class="plat"><span>Stock sheets</span><span>Order logs</span><span>Records audit</span></div>
+      </div>
+      <div class="card">
+        <span class="card-tab">Support</span>
+        <h3>Admin &amp; Client Coordination</h3>
+        <p>Answering routine messages, coordinating with suppliers or teams, and following up on documents so you're not chasing the small stuff.</p>
+        <div class="plat"><span>Messaging</span><span>Follow-ups</span><span>Scheduling</span></div>
+      </div>
+      <div class="card">
+        <span class="card-tab">Accuracy</span>
+        <h3>Quality &amp; Accuracy Checks</h3>
+        <p>A second pass on your listings and records to catch pricing errors, duplicate entries, or missing details before customers do.</p>
+        <div class="plat"><span>QA review</span><span>Error correction</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ledger" id="experience" style="background:var(--paper-2);">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-index">§ 03</span>
+      <h2>Work history</h2>
+      <span class="sec-sub">LEDGER OF RECORD</span>
+    </div>
+    <table class="ledger-table">
+      <thead>
+        <tr><th>Role &amp; Company</th><th>Period</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="role">Clerk</div>
+            <div class="company">Meralco Plaridel Sector / Miescor Logistics, Inc.</div>
+            <div class="duties">Encodes labor &amp; project data, maintains tracking databases, prepares billing statements, inputs and verifies data in SAP.</div>
+          </td>
+          <td class="period">May 2025 – Jun 2026</td>
+          <td><span class="status done">Closed</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="role">Senior Property Specialist</div>
+            <div class="company">Megaworld Resorts Estate, Inc.</div>
+            <div class="duties">Coordinated property operations, sales initiatives, and client relationships for residential and hotel properties.</div>
+          </td>
+          <td class="period">Mar 2025 – May 2025</td>
+          <td><span class="status done">Closed</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="role">Credit &amp; Collection Assistant</div>
+            <div class="company">Toyota Quezon Avenue, Inc.</div>
+            <div class="duties">Processed credit applications, monitored receivables, verified sales/releasing documents, posted payments and commissions.</div>
+          </td>
+          <td class="period">Jul 2023 – Feb 2025</td>
+          <td><span class="status done">Closed</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="role">School Admin Assistant — Intern</div>
+            <div class="company">St. Clare College</div>
+            <div class="duties">Administrative support for faculty and student programs, filing and documentation.</div>
+          </td>
+          <td class="period">Jan 2023 – Jun 2023</td>
+          <td><span class="status done">Closed</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="role">HR Intern</div>
+            <div class="company">CATS Motors, Inc.</div>
+            <div class="duties">Supported recruitment, employee records, timekeeping verification, and HR documentation.</div>
+          </td>
+          <td class="period">Sep 2022 – Dec 2022</td>
+          <td><span class="status done">Closed</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-index">§ 04</span>
+      <h2>Tools &amp; skills</h2>
+      <span class="sec-sub">STAMPED &amp; CERTIFIED</span>
+    </div>
+    <div class="skills-wrap">
+      <span class="skill-stamp">Accounts Receivable &amp; Credit</span>
+      <span class="skill-stamp">SAP — AR &amp; HR-Labor</span>
+      <span class="skill-stamp">Data Encoding &amp; Accuracy</span>
+      <span class="skill-stamp">Billing &amp; Invoicing</span>
+      <span class="skill-stamp">Database Management</span>
+      <span class="skill-stamp">MS Office Suite</span>
+      <span class="skill-stamp">Admin Support</span>
+      <span class="skill-stamp">Client Coordination</span>
+      <span class="skill-stamp">Asset Management</span>
+      <span class="skill-stamp">Financial Documentation</span>
+    </div>
+  </div>
+</section>
+
+<section class="creds" id="credentials">
+  <div class="wrap creds-grid">
+    <div>
+      <h3>Education</h3>
+      <ul>
+        <li><b>BS Business Administration, Major in Management</b><span>St. Clare College, 2018–2023</span></li>
+        <li><b>Senior High — ABM Strand</b><span>John Wesley College, 2016–2018</span></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Training &amp; Certifications</h3>
+      <ul>
+        <li><b>AML Training for Auto Dealers</b><span>EWB &amp; PSBank, 2024</span></li>
+        <li><b>Asian Business Conference — Scaling in Asia</b><span>2021</span></li>
+        <li><b>E-Commerce Training</b><span>2020</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-index">§ 05</span>
+      <h2>Let's get your back office in order</h2>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <p>Tell me which platforms you sell on and what's piling up — listings, encoding, or invoicing. I'll reply with how I can help and a straightforward rate.</p>
+        <div class="contact-lines">
+          <div><span>Email</span><a href="mailto:clairepaulineegatan@gmail.com">clairepaulineegatan@gmail.com</a></div>
+          <div><span>Phone</span><a href="tel:+639458853632">+63 945 885 3632</a></div>
+          <div><span>Based in</span><span style="color:var(--paper);">San Jose Del Monte, Bulacan, PH</span></div>
+        </div>
+      </div>
+      <div class="refs">
+        <h4>Character References</h4>
+        <p style="font-family:var(--sans); font-size:13px; line-height:1.6; opacity:0.9; margin:0;">
+          References from previous employers — including a CPA and an academic dean — are available on request. Contact details are kept private and shared directly with serious inquiries.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>CERTIFIED TRUE AND CORRECT — CLAIRE PAULINE E. GATAN</footer>
+
+<script>
+  // Highlight active tab on scroll
+  const links = document.querySelectorAll('.tabnav li a');
+  const sections = Array.from(links).map(l => document.querySelector(l.getAttribute('href')));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const id = '#' + entry.target.id;
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id));
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  sections.forEach(s => { if(s) obs.observe(s); });
+</script>
+
+</body>
+</html>
